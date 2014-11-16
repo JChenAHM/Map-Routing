@@ -17,35 +17,6 @@ public class EdgeWeightedDigraph {
     }
 
    /**
-     * Create an edge-weighted digraph with V vertices and E edges.
-     */
-    public EdgeWeightedDigraph(int V, int E) {
-        this(V);
-        if (E < 0) throw new IllegalArgumentException("Number of edges in a Digraph must be nonnegative");
-        for (int i = 0; i < E; i++) {
-            int v = (int) (Math.random() * V);
-            int w = (int) (Math.random() * V);
-            double weight = Math.round(100 * Math.random()) / 100.0;
-            DirectedEdge e = new DirectedEdge(v, w, weight);
-            addEdge(e);
-        }
-    }
-
-    /**
-     * Create an edge-weighted digraph from input stream.
-     */
-    public EdgeWeightedDigraph(In in) {
-        this(in.readInt());
-        int E = in.readInt();
-        for (int i = 0; i < E; i++) {
-            int v = in.readInt();
-            int w = in.readInt();
-            double weight = in.readDouble();
-            addEdge(new DirectedEdge(v, w, weight));
-        }
-    }
-
-   /**
      * Copy constructor.
      */
     public EdgeWeightedDigraph(EdgeWeightedDigraph G) {
@@ -111,23 +82,4 @@ public class EdgeWeightedDigraph {
         }
         return list;
     } 
-
-   /**
-     * Return a string representation of this digraph.
-     */
-    public String toString() {
-        String NEWLINE = System.getProperty("line.separator");
-        StringBuilder s = new StringBuilder();
-        s.append(V + " " + E + NEWLINE);
-        for (int v = 0; v < V; v++) {
-            s.append(v + ": ");
-            for (DirectedEdge e : adj[v]) {
-                s.append(e + "  ");
-            }
-            s.append(NEWLINE);
-        }
-        return s.toString();
-    }
-    
 }
-    
