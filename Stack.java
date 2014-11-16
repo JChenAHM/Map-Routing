@@ -11,13 +11,7 @@ public class Stack<Item> implements Iterable<Item> {
         private Node<Item> next;
     }
 
-    /**
-     * Initializes an empty stack.
-     */
-    public Stack() {
-        first = null;
-        N = 0;
-    }
+   
 
     /**
      * Is this stack empty?
@@ -27,13 +21,7 @@ public class Stack<Item> implements Iterable<Item> {
         return first == null;
     }
 
-    /**
-     * Returns the number of items in the stack.
-     * @return the number of items in the stack
-     */
-    public int size() {
-        return N;
-    }
+   
 
     /**
      * Adds the item to this stack.
@@ -61,31 +49,12 @@ public class Stack<Item> implements Iterable<Item> {
     }
 
 
-    /**
-     * Returns (but does not remove) the item most recently added to this stack.
-     * @return the item most recently added to this stack
-     * @throws java.util.NoSuchElementException if this stack is empty
-     */
-    public Item peek() {
-        if (isEmpty()) throw new NoSuchElementException("Stack underflow");
-        return first.item;
-    }
+   
 
-    /**
-     * Returns a string representation of this stack.
-     * @return the sequence of items in the stack in LIFO order, separated by spaces
-     */
-    public String toString() {
-        StringBuilder s = new StringBuilder();
-        for (Item item : this)
-            s.append(item + " ");
-        return s.toString();
-    }
        
 
     /**
      * Returns an iterator to this stack that iterates through the items in LIFO order.
-     * @return an iterator to this stack that iterates through the items in LIFO order.
      */
     public Iterator<Item> iterator() {
         return new ListIterator<Item>(first);
