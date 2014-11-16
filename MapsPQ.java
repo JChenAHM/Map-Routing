@@ -1,6 +1,30 @@
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+/**
+ * The <tt>IndexMinPQ</tt> class represents an indexed priority queue of generic
+ * keys. It supports the usual <em>insert</em> and <em>delete-the-minimum</em>
+ * operations, along with <em>delete</em> and <em>change-the-key</em> methods.
+ * In order to let the client refer to items on the priority queue, an integer
+ * between 0 and NMAX-1 is associated with each key&mdash;the client uses this
+ * integer to specify which key to delete or change. It also supports methods
+ * for peeking at the minimum key, testing if the priority queue is empty, and
+ * iterating through the keys.
+ * <p>
+ * The <em>insert</em>, <em>delete-the-minimum</em>, <em>delete</em>,
+ * <em>change-key</em>, <em>decrease-key</em>, and <em>increase-key</em>
+ * operations take logarithmic time. The <em>is-empty</em>, <em>size</em>,
+ * <em>min-index</em>, <em>min-key</em>, and <em>key-of</em> operations take
+ * constant time. Construction takes time proportional to the specified
+ * capacity.
+ * <p>
+ * This implementation uses a binary heap along with an array to associate keys
+ * with integers in the given range.
+ * <p>
+ * For additional documentation, see <a
+ * href="http://algs4.cs.princeton.edu/24pq">Section 2.4</a> of <i>Algorithms,
+ * 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
+ */
 public class MapsPQ<Key extends Comparable<Key>> implements
 		Iterable<Integer> {
 	private int NMAX; // maximum number of elements on PQ
@@ -15,6 +39,7 @@ public class MapsPQ<Key extends Comparable<Key>> implements
 	 * @throws java.lang.IllegalArgumentException
 	 *             if NMAX < 0
 	 */
+	@SuppressWarnings("unchecked")
 	public MapsPQ(int NMAX) {
 		if (NMAX < 0)
 			throw new IllegalArgumentException();
@@ -45,12 +70,7 @@ public class MapsPQ<Key extends Comparable<Key>> implements
 		return qp[i] != -1;
 	}
 
-	/**
-	 * Return the number of keys on the priority queue.
-	 */
-	public int size() {
-		return N;
-	}
+	
 
 	/**
 	 * Associate key with index i.
@@ -96,29 +116,9 @@ public class MapsPQ<Key extends Comparable<Key>> implements
 		// }
 	}
 
-	/**
-	 * Return the index associated with a minimal key.
-	 * 
-	 * @throws java.util.NoSuchElementException
-	 *             if priority queue is empty.
-	 */
-	public int minIndex() {
-		if (N == 0)
-			throw new NoSuchElementException("Priority queue underflow");
-		return pq[1];
-	}
+	
 
-	/**
-	 * Return a minimal key.
-	 * 
-	 * @throws java.util.NoSuchElementException
-	 *             if priority queue is empty.
-	 */
-	public Key minKey() {
-		if (N == 0)
-			throw new NoSuchElementException("Priority queue underflow");
-		return keys[pq[1]];
-	}
+	
 
 	/**
 	 * Delete a minimal key and return its associated index.
@@ -138,54 +138,11 @@ public class MapsPQ<Key extends Comparable<Key>> implements
 		return min;
 	}
 
-	/**
-	 * Return the key associated with index i.
-	 * 
-	 * @throws java.lang.IndexOutOfBoundsException
-	 *             unless 0 &le; i < NMAX
-	 * @throws java.util.NoSuchElementException
-	 *             no key is associated with index i
-	 */
-	public Key keyOf(int i) {
-		if (i < 0 || i >= NMAX)
-			throw new IndexOutOfBoundsException();
-		if (!contains(i))
-			throw new NoSuchElementException(
-					"index is not in the priority queue");
-		else
-			return keys[i];
-	}
+	
 
-	/**
-	 * Change the key associated with index i to the specified value.
-	 * 
-	 * @throws java.lang.IndexOutOfBoundsException
-	 *             unless 0 &le; i < NMAX
-	 * @deprecated Replaced by changeKey()
-	 */
-	@Deprecated
-	public void change(int i, Key key) {
-		changeKey(i, key);
-	}
+	
 
-	/**
-	 * Change the key associated with index i to the specified value.
-	 * 
-	 * @throws java.lang.IndexOutOfBoundsException
-	 *             unless 0 &le; i < NMAX
-	 * @throws java.util.NoSuchElementException
-	 *             no key is associated with index i
-	 */
-	public void changeKey(int i, Key key) {
-		if (i < 0 || i >= NMAX)
-			throw new IndexOutOfBoundsException();
-		if (!contains(i))
-			throw new NoSuchElementException(
-					"index is not in the priority queue");
-		keys[i] = key;
-		swim(qp[i]);
-		sink(qp[i]);
-	}
+	
 
 	/**
 	 * Decrease the key associated with index i to the specified value.
@@ -210,50 +167,9 @@ public class MapsPQ<Key extends Comparable<Key>> implements
 		swim(qp[i]);
 	}
 
-	/**
-	 * Increase the key associated with index i to the specified value.
-	 * 
-	 * @throws java.lang.IndexOutOfBoundsException
-	 *             unless 0 &le; i < NMAX
-	 * @throws java.lang.IllegalArgumentException
-	 *             if key &le; key associated with index i
-	 * @throws java.util.NoSuchElementException
-	 *             no key is associated with index i
-	 */
-	public void increaseKey(int i, Key key) {
-		if (i < 0 || i >= NMAX)
-			throw new IndexOutOfBoundsException();
-		if (!contains(i))
-			throw new NoSuchElementException(
-					"index is not in the priority queue");
-		if (keys[i].compareTo(key) >= 0)
-			throw new IllegalArgumentException(
-					"Calling increaseKey() with given argument would not strictly increase the key");
-		keys[i] = key;
-		sink(qp[i]);
-	}
+	
 
-	/**
-	 * Delete the key associated with index i.
-	 * 
-	 * @throws java.lang.IndexOutOfBoundsException
-	 *             unless 0 &le; i < NMAX
-	 * @throws java.util.NoSuchElementException
-	 *             no key is associated with index i
-	 */
-	public void delete(int i) {
-		if (i < 0 || i >= NMAX)
-			throw new IndexOutOfBoundsException();
-		if (!contains(i))
-			throw new NoSuchElementException(
-					"index is not in the priority queue");
-		int index = qp[i];
-		exch(index, N--);
-		swim(index);
-		sink(index);
-		keys[i] = null;
-		qp[i] = -1;
-	}
+	
 
 	/**************************************************************
 	 * General helper functions
@@ -332,3 +248,4 @@ public class MapsPQ<Key extends Comparable<Key>> implements
 			return copy.delMin();
 		}
 	}
+}
