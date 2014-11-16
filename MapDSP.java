@@ -129,11 +129,6 @@ public class MapDSP {
 		}
 	}
 
-	// length of shortest path from s to v
-	public double distTo(int v) {
-		return distTo[v];
-	}
-
 	// is there a path from s to v?
 	public boolean hasPathTo(int v) {
 		return distTo[v] < Double.POSITIVE_INFINITY;
@@ -212,7 +207,4 @@ public class MapDSP {
 		}
 		return true;
 	}
-
-	public static void main(String[] args) {
-	}
-
+}
